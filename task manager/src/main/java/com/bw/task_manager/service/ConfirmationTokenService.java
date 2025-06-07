@@ -1,7 +1,7 @@
 package com.bw.task_manager.service;
 
 import com.bw.task_manager.entity.ConfirmationToken;
-import com.bw.task_manager.reposirory.ConfirmationTokenRepository;
+import com.bw.task_manager.repository.ConfirmationTokenRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

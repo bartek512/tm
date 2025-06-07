@@ -2,7 +2,7 @@ package com.bw.task_manager.service;
 
 import com.bw.task_manager.entity.ConfirmationToken;
 import com.bw.task_manager.entity.User;
-import com.bw.task_manager.reposirory.UserRepository;
+import com.bw.task_manager.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

@@ -16,15 +16,15 @@ public class RegistrationService {
     private final ValidationService validationService;
 
     public String register(RegistrationRequestDto request) throws AddressException {
-        if (!validationService.verifyEmail(request.getEmail())) {
+        if (!validationService.verifyEmail(request.email())) {
             throw new AddressException("Email is incorrect");
         }
 
         User user = new User();
-        user.setEmail(request.getEmail());
-        user.setFirstName(request.getFirstName());
-        user.setLastName(request.getLastName());
-        user.setPassword(request.getPassword());
+        user.setEmail(request.email());
+        user.setFirstName(request.firstName());
+        user.setLastName(request.lastName());
+        user.setPassword(request.password());
         user.setUserRole(UserRole.USER);
 
         return userService.signUpUser(user);

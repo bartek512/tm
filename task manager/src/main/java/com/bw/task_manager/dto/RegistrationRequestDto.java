@@ -1,15 +1,11 @@
 package com.bw.task_manager.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Value;
 
-@Getter
-@Setter
-@AllArgsConstructor
+@Value
 public class RegistrationRequestDto {
-    private final String firstName;
-    private final String lastName;
-    private final String email;
-    private final String password;
+    String firstName;
+    String lastName;
+    String email;
+    String password;
 }

@@ -1,4 +1,4 @@
-package com.bw.task_manager.reposirory;
+package com.bw.task_manager.repository;
 
 import com.bw.task_manager.entity.ConfirmationToken;
 import org.springframework.data.jpa.repository.JpaRepository;
