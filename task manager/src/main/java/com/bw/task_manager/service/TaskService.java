@@ -2,8 +2,11 @@ package com.bw.task_manager.service;
 
 import com.bw.task_manager.dto.TaskDTO;
 import com.bw.task_manager.entity.Task;
+import com.bw.task_manager.entity.User;
 import com.bw.task_manager.mappers.TaskMapper;
 import com.bw.task_manager.repository.TaskRepository;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -27,6 +30,7 @@ public class TaskService {
 
     public TaskDTO save(TaskDTO task) {
         Task saved = taskRepository.save(taskMapper.mapToEntity(task));
+        User currenUser = getCurrenUser();
         return taskMapper.mapToDto(saved);
     }
 
@@ -39,6 +43,18 @@ public class TaskService {
         }
 
         return dtos;
+    }
+
+    private User getCurrenUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return null;
+        }
+        Object principal = authentication.getPrincipal();
+        if (principal instanceof User) {
+            return (User) principal;
+        }
+        return null;
     }
 
     public void deleteTaskById(Long taskId) {

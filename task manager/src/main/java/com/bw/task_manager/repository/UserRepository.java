@@ -2,6 +2,7 @@ package com.bw.task_manager.repository;
 
 import com.bw.task_manager.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 

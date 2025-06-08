@@ -4,7 +4,7 @@ import com.bw.task_manager.dto.TaskDTO;
 import com.bw.task_manager.entity.Task;
 import org.mapstruct.Mapper;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface TaskMapper {
 
     TaskDTO mapToDto(Task entity);
