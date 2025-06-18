@@ -1,9 +1,7 @@
 package com.bw.task_manager.service;
 
+import jakarta.mail.internet.InternetAddress;
 import org.springframework.stereotype.Service;
-
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
 
 @Service
 public class ValidationService {

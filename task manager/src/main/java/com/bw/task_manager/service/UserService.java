@@ -1,10 +1,12 @@
 package com.bw.task_manager.service;
 
+import com.bw.task_manager.dto.UserResponseDto;
 import com.bw.task_manager.entity.ConfirmationToken;
 import com.bw.task_manager.entity.User;
+import com.bw.task_manager.mappers.UserMapper;
 import com.bw.task_manager.repository.UserRepository;
+import com.bw.task_manager.security.UserPrincipal;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -21,10 +23,21 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ConfirmationTokenService confirmationTokenService;
+    private final UserMapper userMapper;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return null;
+    public UserDetails loadUserByUsername(String identifier) throws UsernameNotFoundException {
+        User user = userRepository.findByEmailOrLogin(identifier)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + identifier));
+
+        return UserPrincipal.create(user);
+    }
+
+    public UserResponseDto findUserByIdentifier(String identifier) {
+        User user = userRepository.findByEmailOrLogin(identifier)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + identifier));
+
+        return userMapper.toUserResponseDto(user);
     }
 
     public String signUpUser(User user) {
@@ -57,5 +70,4 @@ public class UserService implements UserDetailsService {
 
         return token;
     }
-
 }

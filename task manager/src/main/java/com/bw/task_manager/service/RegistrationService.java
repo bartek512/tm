@@ -6,7 +6,7 @@ import com.bw.task_manager.enums.UserRole;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.mail.internet.AddressException;
+import jakarta.mail.internet.AddressException;
 
 @Service
 @AllArgsConstructor
