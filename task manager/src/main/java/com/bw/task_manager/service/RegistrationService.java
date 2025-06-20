@@ -26,6 +26,7 @@ public class RegistrationService {
         user.setLastName(request.getLastName());
         user.setPassword(request.getPassword());
         user.setUserRole(UserRole.USER);
+        user.setLogin(request.getLogin());
 
         return userService.signUpUser(user);
     }

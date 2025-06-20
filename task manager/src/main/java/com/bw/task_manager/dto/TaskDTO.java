@@ -10,4 +10,5 @@ public class TaskDTO {
     String title;
     String description;
     LocalDateTime timestamp;
+    boolean completed;
 }

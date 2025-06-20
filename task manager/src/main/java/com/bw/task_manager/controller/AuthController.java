@@ -2,48 +2,51 @@ package com.bw.task_manager.controller;
 
 import com.bw.task_manager.dto.JwtResponseDto;
 import com.bw.task_manager.dto.LoginRequestDto;
-import com.bw.task_manager.dto.UserResponseDto;
 import com.bw.task_manager.entity.User;
-import com.bw.task_manager.security.JwtUtil;
-import com.bw.task_manager.service.UserService;
+import com.bw.task_manager.security.UserPrincipal;
+import com.bw.task_manager.service.JwtService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
+@CrossOrigin(origins = "http://localhost:4200")
 public class AuthController {
 
-    @Autowired
-    AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
+    private final JwtService jwtService;
 
-    @Autowired
-    UserService userService;
-
-    @Autowired
-    JwtUtil jwtUtils;
+    public AuthController(AuthenticationManager authenticationManager, JwtService jwtService) {
+        this.authenticationManager = authenticationManager;
+        this.jwtService = jwtService;
+    }
 
     @PostMapping("/login")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequestDto loginRequest) {
+    public ResponseEntity<JwtResponseDto> login(@Valid @RequestBody LoginRequestDto loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getIdentifier(), loginRequest.getPassword()));
+                new UsernamePasswordAuthenticationToken(
+                        loginRequest.getIdentifier(),
+                        loginRequest.getPassword()
+                )
+        );
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtUtils.generateJwtToken(authentication);
+        String jwt = jwtService.generateToken(authentication);
 
-        UserResponseDto user = userService.findUserByIdentifier(loginRequest.getIdentifier());
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
 
-        return ResponseEntity.ok(new JwtResponseDto(jwt,
-                user.getLogin(),
-                user.getEmail(),
-                user.getUserRole()));
+        JwtResponseDto response = new JwtResponseDto(
+                jwt,
+                "Bearer",
+                userPrincipal.getUsername(),
+                userPrincipal.getEmail(),
+                userPrincipal.getRole()
+        );
+
+        return ResponseEntity.ok(response);
     }
 }

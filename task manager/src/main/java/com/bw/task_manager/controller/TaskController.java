@@ -4,11 +4,9 @@ import com.bw.task_manager.dto.TaskDTO;
 import com.bw.task_manager.service.TaskService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RequestMapping("/api/tasks")
 @RestController
@@ -24,18 +22,24 @@ public class TaskController {
     public ResponseEntity<TaskDTO> saveTask(@RequestBody TaskDTO task) {
         TaskDTO saved = taskService.save(task);
 
-        return ResponseEntity.ok(saved);
+        return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
     @GetMapping
-    public ResponseEntity<List<TaskDTO>> getTasks() {
-        return ResponseEntity.ok(taskService.getAll());
+    public ResponseEntity<List<TaskDTO>> getUserTasks() {
+        return ResponseEntity.ok(taskService.getAllForUser());
     }
 
     @DeleteMapping("/{taskId}")
     public ResponseEntity<Void> deleteTask(@PathVariable Long taskId) {
         TaskDTO task = taskService.findById(taskId);
         taskService.deleteTaskById(taskId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{taskId}")
+    public ResponseEntity<TaskDTO> updateTask(@PathVariable Long taskId, @RequestBody TaskDTO taskDto) {
+        TaskDTO updated = taskService.updateTask(taskId, taskDto);
+        return ResponseEntity.ok(updated);
     }
 }
